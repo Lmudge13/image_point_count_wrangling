@@ -83,7 +83,7 @@ head(pointcount)
 ```{r summarize}
 
 # Quick way to get a frequency count on a column of interest:
-plyr::count(pointcount$Label)
+plyr::count(pointcount$label)
 
 #Count number of unique species in your dataset:
 
