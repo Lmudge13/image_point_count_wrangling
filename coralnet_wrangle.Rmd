@@ -20,12 +20,40 @@ library(tidyverse) #install.packages(tidyverse)
 getwd()
 
 #change your working directory, if necessary. Should be the folder your data is stored in.
-setwd()
+#setwd()
 ```
-```{r mergefiles}
-metadata <- read_csv()
 
-data <- leftjoin()
+#Constants
+```{r constants}
 
+## This is where people define variable names, esp if they are specific to a filepath
+
+#what the user should do:
+#metadata <- "add filename path"
+
+#data <- "add filename path"
+
+#Here we are reading in the metadata and data files from the impage_point_count_wrangle github repo:
+
+metadata <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/sample_metadata_coralnet.csv")
+
+data <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/sample_data_annotations_simple_coralnet.csv")
+
+```
+
+#Functions
+```{r functions}
+
+## add code for functions here
+
+```
+
+# Main 
+```{r main}
+## add the main code we want to run, here in this chunk
+
+#read_csv(metadata variable from above)
+
+#read_csv(data variable from above)
 ```
 
