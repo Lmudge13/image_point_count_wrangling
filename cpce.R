@@ -37,3 +37,10 @@ write.csv(df_unique, "unique_cpce_categories.csv", row.names = FALSE)
 ## gps to be given
 ## 10 random photo quads, randomly chose 5 to do CPCe
 ## 50 points in CPCe
+
+
+## Things to do
+# check with the headers of the coral net file to be able to bind the outputs
+# waiting on Raph to send metadata
+# 3 output files: data, metadata, and codes
+# maybe use Kaneohe algae as the example cuz there is the need to bind both
