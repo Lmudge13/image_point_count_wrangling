@@ -53,7 +53,9 @@ labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 ```
 
-# How to put your data & metadata into one dataframe: 
+# How to put your data & metadata into one dataframe:  
+Note: your metadata columns might have some different names, but as on the metadata you entered into CoralNet. Here, we give an example of metadata that includes site and transect, as these are commonly used metrics for analyzing data  
+
 ```{r main}
 ## add the main code we want to run, here in this chunk
 
@@ -99,20 +101,20 @@ unique(pointcount$full_name)
 ```{r labels}
 
 # Percent cover of all labels, across all sites in your pointcount dataset:
-pointcount %>%
+perc_cov_lab<-pointcount %>%
   dplyr::group_by(label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
 # Percent cover of each label, for each site in the dataset:
-pointcount %>%
+perc_cov_lab_site<- pointcount %>%
   dplyr::group_by(site, label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
 # Percent cover of each label, by site & transect 
-pointcount %>%
-  dplyr::group_by(site, spur, label) %>%
+perc_cov_lab_site_trans<-pointcount %>%
+  dplyr::group_by(site, transect, label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
@@ -127,20 +129,20 @@ pointcount %>%
 
 # Percent cover of all functional groups, across all sites in your pointcount dataset:
 
-pointcount %>%
+perc_cov_funct<- pointcount %>%
   dplyr::group_by(functional_group) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
 
 # Percent cover of each functional group, for each site in the dataset:
-pointcount %>%
+perc_cov_funct_site<-pointcount %>%
   dplyr::group_by(site, functional_group) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
 # Percent cover of each functional group, by site & transect
-pointcount %>%
+perc_cov_funct_site_trans<- pointcount %>%
   dplyr::group_by(site, transect, functional_group) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
