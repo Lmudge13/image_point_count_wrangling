@@ -82,11 +82,21 @@ head(pointcount)
 # Summarizing your pointcount data:
 ```{r summarize}
 
-## Quick way to get a frequency count on a column of interest:
+# Quick way to get a frequency count on a column of interest:
 plyr::count(pointcount$Label)
 
+#Count number of unique species in your dataset:
 
-##### CALCULATE PERCENT COVER OF YOUR POINT LABELS #####
+unique(pointcount$full_name)
+
+```
+
+## Calculate percent cover, using labels:  
+* Across all sites  
+* % cover by site  
+* % cover by site and transect  
+
+```{r labels}
 
 # Percent cover of all labels, across all sites in your pointcount dataset:
 pointcount %>%
@@ -107,8 +117,13 @@ pointcount %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
 
+```
 
-##### CACULATE PERCENT COVER OF YOUR FUNCTIONAL GROUPS #####
+## Calculate percent cover, based on functional groups:
+* Across all sites  
+* % cover by site  
+* % cover by site and transect  
+```{r functional}
 
 # Percent cover of all functional groups, across all sites in your pointcount dataset:
 
@@ -129,8 +144,6 @@ pointcount %>%
   dplyr::group_by(site, transect, functional_group) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
-
-
-
 ```
+
 
