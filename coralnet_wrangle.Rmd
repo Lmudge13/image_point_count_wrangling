@@ -70,54 +70,67 @@ pointcount <- dplyr::left_join(data, metadata, by ="Name")
 
 pointcount <- dplyr::left_join(pointcount, labelset, by ="Label")
 
-head(pointcount)
 
 ## Tidy up the column names on the pointcount dataframe:
 pointcount<- janitor::clean_names(pointcount)
 
+
+# Take a look at your dataframe:
+head(pointcount)
 ```
 
 # Summarizing your pointcount data:
 ```{r summarize}
 
-#Quick way to get a frequency count on a column of interest:
+## Quick way to get a frequency count on a column of interest:
 plyr::count(pointcount$Label)
 
 
+##### CALCULATE PERCENT COVER OF YOUR POINT LABELS #####
 
-######Get the percent covers of all Labels, across all sites in your pointcount dataset:
-
+# Percent cover of all labels, across all sites in your pointcount dataset:
 pointcount %>%
-  dplyr::group_by(Label) %>%
+  dplyr::group_by(label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
-## Percent cover of each label, for each site in the dataset:
+# Percent cover of each label, for each site in the dataset:
 pointcount %>%
-  dplyr::group_by(Site, Label) %>%
+  dplyr::group_by(site, label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
-## Percent cover of each label, by site & spur (spur = transect number)
+# Percent cover of each label, by site & transect 
 pointcount %>%
-  dplyr::group_by(Site, Spur, Label) %>%
+  dplyr::group_by(site, spur, label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
 
-### Create a column in akumal that has the % macro cover for each spur/site combo:
-#benthic %>%
-  #group_by(site, spur, functional) %>%
-  #summarise (n = n()) %>%
-  #mutate(perc_cov = n / sum(n)*100) %>%
-  #filter(functional=="macro")
-  ###no macro count for 161Acrop 1b because that was an elkhorn thicket
 
-macro<- benthic %>%
-  group_by(site, spur, functional) %>%
-  summarise (n = n()) %>%
-  mutate(PC_macro = n / sum(n)*100) %>%
-  filter(functional=="macro") %>%
-  select(site, spur, PC_macro)
+
+##### CACULATE PERCENT COVER OF YOUR FUNCTIONAL GROUPS #####
+
+# Percent cover of all functional groups, across all sites in your pointcount dataset:
+
+pointcount %>%
+  dplyr::group_by(functional_group) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+
+# Percent cover of each functional group, for each site in the dataset:
+pointcount %>%
+  dplyr::group_by(site, functional_group) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+# Percent cover of each functional group, by site & transect
+pointcount %>%
+  dplyr::group_by(site, transect, functional_group) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+
 
 ```
 
