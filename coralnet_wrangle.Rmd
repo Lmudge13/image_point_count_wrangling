@@ -3,6 +3,8 @@ title: "coralnet_wrangle"
 author: "lkm"
 date: "March 14, 2018"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 # What you need from coralnet:  
@@ -15,6 +17,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse) #install.packages(tidyverse)
+library(janitor)
 
 #check your working directory
 getwd()
@@ -50,7 +53,7 @@ labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 ```
 
-# Main 
+# How to put your data & metadata into one dataframe: 
 ```{r main}
 ## add the main code we want to run, here in this chunk
 
@@ -60,13 +63,61 @@ labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 
 ## Add the data & metadata .csv outputs from CoralNet:
-pointcount <- left_join(data, metadata, by ="Name")
+pointcount <- dplyr::left_join(data, metadata, by ="Name")
 
 
 ## Add functional group column to pointcount dataset, using labelset provided by CoralNet (posted on github)
 
-pointcount <- left_join(pointcount, labelset, by ="Label")
+pointcount <- dplyr::left_join(pointcount, labelset, by ="Label")
 
 head(pointcount)
+
+## Tidy up the column names on the pointcount dataframe:
+pointcount<- janitor::clean_names(pointcount)
+
+```
+
+# Summarizing your pointcount data:
+```{r summarize}
+
+#Quick way to get a frequency count on a column of interest:
+plyr::count(pointcount$Label)
+
+
+
+######Get the percent covers of all Labels, across all sites in your pointcount dataset:
+
+pointcount %>%
+  dplyr::group_by(Label) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+## Percent cover of each label, for each site in the dataset:
+pointcount %>%
+  dplyr::group_by(Site, Label) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+## Percent cover of each label, by site & spur (spur = transect number)
+pointcount %>%
+  dplyr::group_by(Site, Spur, Label) %>%
+  dplyr::summarise (n = n()) %>%
+  dplyr::mutate(perc_cov = n / sum(n)*100)
+
+### Create a column in akumal that has the % macro cover for each spur/site combo:
+#benthic %>%
+  #group_by(site, spur, functional) %>%
+  #summarise (n = n()) %>%
+  #mutate(perc_cov = n / sum(n)*100) %>%
+  #filter(functional=="macro")
+  ###no macro count for 161Acrop 1b because that was an elkhorn thicket
+
+macro<- benthic %>%
+  group_by(site, spur, functional) %>%
+  summarise (n = n()) %>%
+  mutate(PC_macro = n / sum(n)*100) %>%
+  filter(functional=="macro") %>%
+  select(site, spur, PC_macro)
+
 ```
 
