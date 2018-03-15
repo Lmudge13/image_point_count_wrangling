@@ -22,3 +22,10 @@ for(i in length(list.files(paste(getwd(),'/data_cpce',sep='')))){
   unique_all <- rbind(unique_all,df_unique)
 }
 write.csv(df_unique, "unique_cpce_categories.csv")
+
+## 1 - 5 is at 2m
+## 6 - 10 is at 0.5m
+## 10 meter long transects
+## gps to be given
+## 10 random photo quads, randomly chose 5 to do CPCe
+## 50 points in CPCe
