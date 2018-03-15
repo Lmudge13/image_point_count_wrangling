@@ -40,6 +40,7 @@ write.csv(df_unique, "unique_cpce_categories.csv", row.names = FALSE)
 
 
 ## Things to do
+# create some fake cpce data to include in the repo so that this code will run
 # check with the headers of the coral net file to be able to bind the outputs
 # waiting on Raph to send metadata
 # 3 output files: data, metadata, and codes
