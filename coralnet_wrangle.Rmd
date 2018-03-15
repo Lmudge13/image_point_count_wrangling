@@ -39,6 +39,8 @@ metadata <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 data <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/sample_data_annotations_simple_coralnet.csv")
 
+labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coralnet_labelset.csv")
+
 ```
 
 #Functions
@@ -55,5 +57,16 @@ data <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_w
 #read_csv(metadata variable from above)
 
 #read_csv(data variable from above)
+
+
+## Add the data & metadata .csv outputs from CoralNet:
+pointcount <- left_join(data, metadata, by ="Name")
+
+
+## Add functional group column to pointcount dataset, using labelset provided by CoralNet (posted on github)
+
+pointcount <- left_join(pointcount, labelset, by ="Label")
+
+head(pointcount)
 ```
 
