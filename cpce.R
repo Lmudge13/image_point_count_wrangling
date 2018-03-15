@@ -5,11 +5,20 @@ library(dplyr)
 library(purrr)
 library(readxl)
 
+
+# Initialize the dataframe to stor all the files content
 unique_all <- data.frame()
-for(i in length(list.files(paste(getwd(),'/data_cpce',sep='')))){
-  dat.path <- paste(getwd(),'/data_cpce/'
-                    ,list.files(paste(getwd(),'/data_cpce',sep=''))[i],sep='')
-  cpce_data <-read_xlsx(dat.path)
+
+# Path to folder containing Excel files
+excel_dir <- file.path(getwd(),'data_cpce')
+
+# list the excel files
+excel_files <- list.files(excel_dir, pattern = "xlsx", full.names = TRUE)
+
+# Looping through the files
+for(i in 1:length(excel_files)){
+  # Read 
+  cpce_data <-read_xlsx(excel_files[i])
   
   # Get the unique value
   unique_catgories <- cpce_data %>%
@@ -17,11 +26,10 @@ for(i in length(list.files(paste(getwd(),'/data_cpce',sep='')))){
     map(unique)
   
   # Make it a dataframe
-  
   df_unique <- as.data.frame(unlist(unique_catgories))
   unique_all <- rbind(unique_all,df_unique)
 }
-write.csv(df_unique, "unique_cpce_categories.csv")
+write.csv(df_unique, "unique_cpce_categories.csv", row.names = FALSE)
 
 ## 1 - 5 is at 2m
 ## 6 - 10 is at 0.5m
