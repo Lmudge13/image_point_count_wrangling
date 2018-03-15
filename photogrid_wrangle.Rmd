@@ -1,0 +1,20 @@
+---
+title: "photogrid_wrangle"
+author: "Chris Sullivan"
+date: "March 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Converting Photo_grid output in to standardized form
+
+# Load Packages
+
+# Constants
+
+# Functions
+
+# Main code
