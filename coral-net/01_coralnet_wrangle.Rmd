@@ -41,14 +41,13 @@ This is where users can define variable names for imported datasets, especially 
 
 ## Here we are reading in the metadata and data files from the impage_point_count_wrangle github repo:
 
-metadata <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/sample_metadata_coralnet.csv")
+data <- read_csv ("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/02_sample_data_annotations_simple_coralnet.csv")
 
-data <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/sample_data_annotations_simple_coralnet.csv")
+metadata <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/03_sample_metadata_coralnet.csv")
 
 
 # ALL users can import this labelset using the follwing code:
-labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coralnet_labelset.csv")
-
+labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/04_coralnet_labelset.csv")
 ```
 
 #Functions
