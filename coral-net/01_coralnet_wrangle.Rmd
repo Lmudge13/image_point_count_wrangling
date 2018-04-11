@@ -9,9 +9,9 @@ editor_options:
 
 # What you need to get started:  
 
-* your exported metadata file  
-* your exported annotations file (this is your data) 
-* labelset .csv (provided in the github repo)  
+* DATA: your exported annotations file from CoralNet 
+* METADATA: your exported metadata file from CoralNet
+* LABELS: provided in the github repo (04_coralnet_labelset.csv) (see below). This includes the full name and functional group for each [CoralNet label](https://coralnet.ucsd.edu/label/list/).You will need to download and edit your own copy if you used labels other than those already on CoralNet as of March 2018. 
 
 
 ```{r setup, include=FALSE}
@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse) #install.packages(tidyverse)
 library(janitor)
+library(ggplot2)
 
 #check your working directory
 getwd()
@@ -27,27 +28,35 @@ getwd()
 #setwd()
 ```
 
-#Constants  
-This is where users can define variable names for imported datasets, especially if they are specific to a filepath. Here you will create variables called metadata and data, using your specific filepath location
-```{r constants}
+#Importing data 
+Here you will create variables: data, metadata, and labelset. We've provided a sample data set situated on the GitHub repo for you to play around with if you want or you can add your own filename paths to import your own data. 
 
-## Example code to add your own metadata and data variables, remove the # to run:
+**Sample data set:** here we are reading in the data, metadata and labelset files from the image_point_count_wrangle github repo:
 
-#metadata <- "add filename path"
-#read_csv(metadata variable from above)
-
-#data <- "add filename path"
-#read_csv(data variable from above)
-
-## Here we are reading in the metadata and data files from the impage_point_count_wrangle github repo:
+```{r import_sampledata, echo=TRUE, message=FALSE}
 
 data <- read_csv ("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/02_sample_data_annotations_simple_coralnet.csv")
 
 metadata <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/03_sample_metadata_coralnet.csv")
 
-
-# ALL users can import this labelset using the follwing code:
 labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/04_coralnet_labelset.csv")
+
+#The labelset file provides additional information on the organisms full name and their relevant functional group based on the set of short code labels typically used by CoralNet users.This extra information is not provided in the data output from CoralNet and therefore needs to be imported separately.
+
+```
+
+**Example code to import your own data, metadata and labels**
+```{r import_owndata, message=FALSE}
+## Don't forget to remove the # to run this chunk (and add a # in front of the sample data set code (or delete it) if you don't wish to use it.
+
+#data <- read_csv ("add filename path")
+
+#metadata <- read_csv ("add filename path")
+
+#labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_count_wrangling/master/coral-net/04_coralnet_labelset.csv"). 
+
+#Don't forget to edit the labelset filename path if you had to made modifications to this file.
+
 ```
 
 #Functions
@@ -57,17 +66,18 @@ labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 ```
 
-# How to put your data & metadata into one dataframe:  
-Your metadata columns might have different names, based on the metadata you entered into CoralNet. Here, we give an example of metadata that includes site and transect, as these are commonly used metrics for analyzing data  
 
-```{r main}
+# Merging and tidying your data 
+Here you will create the variable 'pointcount' by merging your data, metadata and labels into one data frame. Then you will reformat the column headings into snake_case so they are computer-readable. Your metadata columns might have different names, based on the metadata you entered into CoralNet. Here, we give an example of metadata that includes site and transect, as these are commonly used metrics for analyzing data.  
+
+```{r main, echo=TRUE, message=FALSE}
 
 
-## Join together the data & metadata .csv outputs from CoralNet:
+## Merge together the data & metadata outputs from CoralNet:
 pointcount <- dplyr::left_join(data, metadata, by ="Name")
 
 
-## Add functional group column to pointcount dataset, using labelset provided by CoralNet (posted on github)
+## Now merge the functional groups to pointcount dataset
 pointcount <- dplyr::left_join(pointcount, labelset, by ="Label")
 
 
@@ -76,7 +86,7 @@ pointcount<- janitor::clean_names(pointcount)
 
 
 # Take a look at your dataframe:
-head(pointcount)
+glimpse(pointcount)
 ```
 
 # Summarizing your pointcount data:
@@ -86,7 +96,6 @@ head(pointcount)
 plyr::count(pointcount$label)
 
 #Count number of unique species in your dataset:
-
 unique(pointcount$full_name)
 
 ```
