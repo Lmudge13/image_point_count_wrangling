@@ -59,8 +59,8 @@ labelset <- read_csv("https://raw.githubusercontent.com/Lmudge13/image_point_cou
 
 ```
 
-#Functions
-```{r functions}
+
+```{r functions, echo=FALSE}
 
 ## add code for functions here
 
@@ -77,26 +77,43 @@ Here you will create the variable 'pointcount' by merging your data, metadata an
 pointcount <- dplyr::left_join(data, metadata, by ="Name")
 
 
-## Now merge the functional groups to pointcount dataset
+## Now merge the labels to the pointcount dataset
 pointcount <- dplyr::left_join(pointcount, labelset, by ="Label")
 
 
 ## Tidy up the column names on the pointcount dataframe:
 pointcount<- janitor::clean_names(pointcount)
 
-
-# Take a look at your dataframe:
+# Take a look at your dataframe. Here we use glimpse() instead of head() as it flips the column headings so you can see them all. You'll notice a number of the columns are filled with 'NA' i.e. not applicable, i.e. no data. (<chr> = character i.e. text and <int> = integer i.e. a whole number)
 glimpse(pointcount)
+
+## You can remove the columns with NA in all of the cells with janitor (if you want to keep the NA columns add a # infront of this code)
+pointcount <- remove_empty_cols(pointcount)
+
+# Take a look at your dataframe now:
+glimpse(pointcount)
+head(pointcount)
 ```
 
 # Summarizing your pointcount data:
 ```{r summarize}
 
-# Quick way to get a frequency count on a column of interest:
-plyr::count(pointcount$label)
+# Quick way to get a total frequency count on a column of interest i.e. how many times did you see each organism across all your photos:
+plyr::count(pointcount$full_name)
+#plyr::count(pointcount$label)- same thing but listed by label instead
 
-#Count number of unique species in your dataset:
+#Count number of unique observation type (organism/benthos type etc.) in your dataset i.e. get a list of the organisms you saw across all your photos:
 unique(pointcount$full_name)
+
+# Or to just see how many unique observations you have for all columns:
+pointcount %>% summarise_all(funs(n_distinct(.)))
+
+#Here you can remove additional columns if they contain the same value throughout i.e. provide no information. Here I will remove "height_cm" as every cell is the same.
+pointcount$height_cm <- NULL
+
+#Now you can see we are now left with 11 columns
+
+pointcount %>% summarise_all(funs(n_distinct(.)))
 
 ```
 
