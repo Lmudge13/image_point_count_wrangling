@@ -102,7 +102,7 @@ head(pointcount)
 plyr::count(pointcount$full_name)
 #plyr::count(pointcount$label)- same thing but listed by label instead
 
-#Count number of unique observation type (organism/benthos type etc.) in your dataset i.e. get a list of the organisms you saw across all your photos:
+#Count number of unique observation type (organism/benthos type etc.) in your dataset i.e. get a list of the observation types you saw across all your photos:
 unique(pointcount$full_name)
 
 # Or to just see how many unique observations you have for all columns:
@@ -111,7 +111,7 @@ pointcount %>% summarise_all(funs(n_distinct(.)))
 #Here you can remove additional columns if they contain the same value throughout i.e. provide no information. Here I will remove "height_cm" as every cell is the same.
 pointcount$height_cm <- NULL
 
-#Now you can see we are now left with 11 columns
+#Now you can see we are left with 10 columns
 
 pointcount %>% summarise_all(funs(n_distinct(.)))
 
@@ -119,8 +119,8 @@ pointcount %>% summarise_all(funs(n_distinct(.)))
 
 ## Calculate percent cover, using labels:  
 * Across all sites  
-* % cover by site  
-* % cover by site and transect  
+* For each site  
+* By site and transect  
 
 ```{r labels}
 
@@ -129,6 +129,8 @@ perc_cov_lab<-pointcount %>%
   dplyr::group_by(label) %>%
   dplyr::summarise (n = n()) %>%
   dplyr::mutate(perc_cov = n / sum(n)*100)
+
+ggplot(data = perc_cov_lab, aes(y=perc_cov, x=label, color = perc_cov, fill = perc_cov)) + geom_col()  + theme(axis.text.x=element_text(angle = 60, hjust = 1))
 
 # Percent cover of each label, for each site in the dataset:
 perc_cov_lab_site<- pointcount %>%
